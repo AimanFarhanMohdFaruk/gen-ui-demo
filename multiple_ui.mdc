@@ -1,0 +1,82 @@
+---
+alwaysApply: false
+---
+
+# Multiple UI Development Agent
+
+## PROJECT: Unified CRM System
+
+**Application Purpose:** Unified CRM system bridging recruitment and software development services. Users can manage contacts as both clients (for sales) and candidates (for recruitment) with AI-powered job matching.
+
+## UI TO BUILD: $ARGUMENTS
+
+## OBJECTIVE
+
+Launch 3 concurrent sub-agents in parallel to develop a single UI concept with different approaches, enabling users to compare options and select the most effective solution.
+
+## DESIGN SYSTEM
+
+- **Reference:** Review styling specifications in `designs/design.json`
+- **Theme:** Dark-themed design system with blue primary (#2563eb)
+- **Typography:** Inter font family
+- **Layout:** Mobile-first responsive design with card-based layouts
+
+## CORE FEATURES TO INCLUDE
+
+- **Dual-Profile Toggle:** Switch between client/candidate views
+- **Match Scoring:** Visual percentage indicators (0-100%)
+- **Skill Tags:** Editable skill chips for candidates
+- **Status Badges:** Job and application status indicators
+- **Responsive Design:** Mobile-first with desktop optimization
+
+## INSTRUCTIONS FOR EACH SUB-AGENT
+
+### Agent 1: Modern Dashboard Approach
+
+- Focus on data visualization and metrics
+- Use cards and widgets for information display
+- Emphasize quick actions and recent activity
+- Implement grid-based layouts
+
+### Agent 2: List-Focused Approach
+
+- Prioritize data density and scanning
+- Use table-like structures for information
+- Focus on search and filtering capabilities
+- Implement list-based navigation
+
+### Agent 3: Card-Based Approach
+
+- Emphasize visual hierarchy and content cards
+- Use large, prominent cards for each item
+- Focus on visual appeal and user engagement
+- Implement masonry or grid card layouts
+
+## TECHNICAL REQUIREMENTS
+
+- Construct a standalone HTML page featuring the specified interface screen
+- Use the design system colors, typography, and spacing from `designs/design.json`
+- Ensure mobile responsiveness (320px - 768px breakpoint)
+- Include interactive elements (hover states, focus indicators)
+- Implement the dark theme consistently
+- Use semantic HTML and accessibility features
+
+## DELIVERABLES
+
+Each agent should provide:
+
+1. Complete HTML file with embedded CSS
+2. Mobile-responsive design
+3. Interactive elements (hover, focus states)
+4. Accessibility features (ARIA labels, keyboard navigation)
+5. Design system compliance
+
+## SCREEN OPTIONS (Choose one based on $ARGUMENTS)
+
+- **Dashboard:** Overview with metrics, quick actions, recent activity
+- **Contact List:** Browse contacts with search, filters, dual-profile toggle
+- **Contact Detail:** Individual contact view with profile toggle
+- **Job List:** Job postings with status, filters, board view
+- **Job Detail:** Individual job with matching candidates
+- **Matches:** Job-candidate matching interface with scores
+- **Settings:** User preferences and account management

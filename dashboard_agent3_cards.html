@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Unified CRM - Dashboard (Card-Based)</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, sans-serif;
+        background-color: #0a0a0a;
+        color: #fafafa;
+        line-height: 1.5;
+      }
+
+      .layout {
+        display: flex;
+        min-height: 100vh;
+      }
+
+      /* Sidebar */
+      .sidebar {
+        width: 280px;
+        background-color: #171717;
+        border-right: 1px solid #404040;
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #2563eb;
+        margin-bottom: 2rem;
+      }
+
+      .nav-item {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        margin-bottom: 0.5rem;
+        color: #a3a3a3;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        font-size: 0.875rem;
+        font-weight: 500;
+      }
+
+      .nav-item.active {
+        background-color: #2563eb;
+        color: #fafafa;
+      }
+
+      .nav-item:hover:not(.active) {
+        background-color: #262626;
+        color: #fafafa;
+      }
+
+      .nav-item svg {
+        width: 1.25rem;
+        height: 1.25rem;
+        margin-right: 0.75rem;
+      }
+
+      /* Main Content */
+      .main {
+        flex: 1;
+        padding: 2rem;
+        background-color: #0a0a0a;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+      }
+
+      .welcome {
+        font-size: 1.875rem;
+        font-weight: 700;
+        color: #fafafa;
+      }
+
+      .date {
+        color: #a3a3a3;
+        font-size: 0.875rem;
+      }
+
+      .user-menu {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .notifications {
+        position: relative;
+        padding: 0.5rem;
+        background-color: #171717;
+        border: 1px solid #404040;
+      }
+
+      .avatar {
+        width: 2.5rem;
+        height: 2.5rem;
+        background-color: #2563eb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        color: #fafafa;
+      }
+
+      /* Hero Section */
+      .hero-section {
+        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        padding: 2rem;
+        margin-bottom: 2rem;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero-section::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 200px;
+        height: 200px;
+        background: rgba(255, 255, 255, 0.1);
+        transform: translate(50%, -50%);
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 1;
+      }
+
+      .hero-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #fafafa;
+        margin-bottom: 0.5rem;
+      }
+
+      .hero-subtitle {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .hero-stats {
+        display: flex;
+        gap: 2rem;
+      }
+
+      .hero-stat {
+        text-align: center;
+      }
+
+      .hero-stat-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #fafafa;
+        display: block;
+      }
+
+      .hero-stat-label {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      /* Cards Grid */
+      .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .card {
+        background-color: #171717;
+        border: 1px solid #404040;
+        padding: 1.5rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #2563eb, #10b981);
+      }
+
+      .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 24px -1px rgba(0, 0, 0, 0.5);
+        border-color: #2563eb;
+      }
+
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+
+      .card-title {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: #fafafa;
+      }
+
+      .card-icon {
+        width: 2.5rem;
+        height: 2.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      }
+
+      .card-icon svg {
+        width: 1.25rem;
+        height: 1.25rem;
+        color: #fafafa;
+      }
+
+      .card-content {
+        margin-bottom: 1rem;
+      }
+
+      .card-value {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #fafafa;
+        margin-bottom: 0.5rem;
+      }
+
+      .card-description {
+        color: #a3a3a3;
+        font-size: 0.875rem;
+        margin-bottom: 1rem;
+      }
+
+      .card-progress {
+        width: 100%;
+        height: 8px;
+        background-color: #262626;
+        overflow: hidden;
+        margin-bottom: 1rem;
+      }
+
+      .progress-fill {
+        height: 100%;
+        transition: width 0.3s ease;
+      }
+
+      .progress-high {
+        background: linear-gradient(90deg, #10b981, #059669);
+      }
+
+      .progress-medium {
+        background: linear-gradient(90deg, #f59e0b, #d97706);
+      }
+
+      .progress-low {
+        background: linear-gradient(90deg, #ef4444, #dc2626);
+      }
+
+      /* Activity Cards */
+      .activity-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 1.5rem;
+      }
+
+      .activity-card {
+        background-color: #171717;
+        border: 1px solid #404040;
+        padding: 1.5rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+        transition: all 0.3s ease;
+      }
+
+      .activity-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px -1px rgba(0, 0, 0, 0.5);
+      }
+
+      .activity-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .activity-avatar {
+        width: 3rem;
+        height: 3rem;
+        background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        color: #fafafa;
+        font-size: 1rem;
+      }
+
+      .activity-info {
+        flex: 1;
+      }
+
+      .activity-name {
+        font-weight: 600;
+        color: #fafafa;
+        margin-bottom: 0.25rem;
+      }
+
+      .activity-time {
+        color: #737373;
+        font-size: 0.875rem;
+      }
+
+      .activity-badge {
+        padding: 0.25rem 0.75rem;
+        font-size: 0.75rem;
+        font-weight: 500;
+      }
+
+      .badge-contact {
+        background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        color: #fafafa;
+      }
+
+      .badge-job {
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: #fafafa;
+      }
+
+      .activity-description {
+        color: #a3a3a3;
+        font-size: 0.875rem;
+        line-height: 1.5;
+        margin-bottom: 1rem;
+      }
+
+      .activity-actions {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .action-btn {
+        padding: 0.5rem 1rem;
+        background-color: #262626;
+        border: 1px solid #404040;
+        color: #a3a3a3;
+        font-size: 0.875rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .action-btn:hover {
+        background-color: #2563eb;
+        border-color: #2563eb;
+        color: #fafafa;
+      }
+
+      .action-btn svg {
+        width: 1rem;
+        height: 1rem;
+      }
+
+      /* Quick Actions */
+      .quick-actions {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .floating-btn {
+        width: 4rem;
+        height: 4rem;
+        background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        border: none;
+        color: #fafafa;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 8px 24px rgba(37, 99, 235, 0.4);
+        transition: all 0.3s ease;
+      }
+
+      .floating-btn:hover {
+        transform: translateY(-4px) scale(1.05);
+        box-shadow: 0 12px 32px rgba(37, 99, 235, 0.5);
+      }
+
+      .floating-btn svg {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+
+      .floating-btn.secondary {
+        background: linear-gradient(135deg, #10b981, #059669);
+        box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
+      }
+
+      .floating-btn.secondary:hover {
+        box-shadow: 0 12px 32px rgba(16, 185, 129, 0.5);
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .layout {
+          flex-direction: column;
+        }
+
+        .sidebar {
+          width: 100%;
+          padding: 1rem;
+        }
+
+        .main {
+          padding: 1rem;
+        }
+
+        .header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 1rem;
+        }
+
+        .hero-section {
+          padding: 1.5rem;
+        }
+
+        .hero-title {
+          font-size: 1.5rem;
+        }
+
+        .hero-stats {
+          flex-direction: column;
+          gap: 1rem;
+        }
+
+        .cards-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .activity-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .quick-actions {
+          bottom: 1rem;
+          right: 1rem;
+        }
+
+        .floating-btn {
+          width: 3.5rem;
+          height: 3.5rem;
+        }
+      }
+
+      /* Focus and Accessibility */
+      .nav-item:focus,
+      .card:focus,
+      .activity-card:focus,
+      .action-btn:focus,
+      .floating-btn:focus {
+        outline: 2px solid #3b82f6;
+        outline-offset: 2px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="layout">
+      <!-- Sidebar Navigation -->
+      <nav class="sidebar">
+        <div class="logo">Unified CRM</div>
+
+        <a href="#" class="nav-item active">
+          <svg fill="currentColor" viewBox="0 0 20 20">
+            <path
+              d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"
+            />
+          </svg>
+          Dashboard
+        </a>
+
+        <a href="#" class="nav-item">
+          <svg fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Contacts
+        </a>
+
+        <a href="#" class="nav-item">
+          <svg fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+            <path
+              fill-rule="evenodd"
+              d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          Jobs
+        </a>
+
+        <a href="#" class="nav-item">
+          <svg fill="currentColor" viewBox="0 0 20 20">
+            <path
+              fill-rule="evenodd"
+              d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          Settings
+        </a>
+      </nav>
+
+      <!-- Main Content -->
+      <main class="main">
+        <!-- Header -->
+        <header class="header">
+          <div>
+            <h1 class="welcome">Welcome back, Sarah!</h1>
+            <p class="date">Monday, July 22, 2024</p>
+          </div>
+          <div class="user-menu">
+            <button class="notifications" aria-label="Notifications">
+              <svg
+                width="20"
+                height="20"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"
+                />
+              </svg>
+            </button>
+            <div class="avatar">S</div>
+          </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero-section">
+          <div class="hero-content">
+            <h2 class="hero-title">Your CRM Overview</h2>
+            <p class="hero-subtitle">
+              Track your recruitment and sales activities in one unified
+              platform
+            </p>
+            <div class="hero-stats">
+              <div class="hero-stat">
+                <span class="hero-stat-value">1,247</span>
+                <span class="hero-stat-label">Total Contacts</span>
+              </div>
+              <div class="hero-stat">
+                <span class="hero-stat-value">23</span>
+                <span class="hero-stat-label">Active Jobs</span>
+              </div>
+              <div class="hero-stat">
+                <span class="hero-stat-value">156</span>
+                <span class="hero-stat-label">Recent Activity</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Metrics Cards -->
+        <div class="cards-grid">
+          <div class="card" tabindex="0">
+            <div class="card-header">
+              <h3 class="card-title">Contact Growth</h3>
+              <div class="card-icon">
+                <svg fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div class="card-content">
+              <div class="card-value">+12%</div>
+              <div class="card-description">New contacts added this month</div>
+              <div class="card-progress">
+                <div
+                  class="progress-fill progress-high"
+                  style="width: 75%"
+                ></div>
+              </div>
+              <div class="card-description">75% of monthly goal achieved</div>
+            </div>
+          </div>
+
+          <div class="card" tabindex="0">
+            <div class="card-header">
+              <h3 class="card-title">Job Success Rate</h3>
+              <div class="card-icon">
+                <svg fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div class="card-content">
+              <div class="card-value">85%</div>
+              <div class="card-description">Successful job placements</div>
+              <div class="card-progress">
+                <div
+                  class="progress-fill progress-high"
+                  style="width: 85%"
+                ></div>
+              </div>
+              <div class="card-description">19 out of 23 jobs filled</div>
+            </div>
+          </div>
+
+          <div class="card" tabindex="0">
+            <div class="card-header">
+              <h3 class="card-title">System Performance</h3>
+              <div class="card-icon">
+                <svg fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div class="card-content">
+              <div class="card-value">92%</div>
+              <div class="card-description">System efficiency rating</div>
+              <div class="card-progress">
+                <div
+                  class="progress-fill progress-high"
+                  style="width: 92%"
+                ></div>
+              </div>
+              <div class="card-description">156 active processes</div>
+            </div>
+          </div>
+
+          <div class="card" tabindex="0">
+            <div class="card-header">
+              <h3 class="card-title">Pending Actions</h3>
+              <div class="card-icon">
+                <svg fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div class="card-content">
+              <div class="card-value">8</div>
+              <div class="card-description">Tasks requiring attention</div>
+              <div class="card-progress">
+                <div
+                  class="progress-fill progress-medium"
+                  style="width: 40%"
+                ></div>
+              </div>
+              <div class="card-description">40% of tasks completed today</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Activity Cards -->
+        <div class="activity-grid">
+          <div class="activity-card" tabindex="0">
+            <div class="activity-header">
+              <div class="activity-avatar">JD</div>
+              <div class="activity-info">
+                <div class="activity-name">John Doe</div>
+                <div class="activity-time">2 minutes ago</div>
+              </div>
+              <span class="activity-badge badge-contact">Contact</span>
+            </div>
+            <div class="activity-description">
+              Added as new contact with React.js and TypeScript skills.
+              Currently available for frontend development roles.
+            </div>
+            <div class="activity-actions">
+              <a href="#" class="action-btn">
+                <svg fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                  <path
+                    fill-rule="evenodd"
+                    d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                View Profile
+              </a>
+              <a href="#" class="action-btn">
+                <svg fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"
+                  />
+                  <path
+                    d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"
+                  />
+                </svg>
+                Send Message
+              </a>
+            </div>
+          </div>
+
+          <div class="activity-card" tabindex="0">
+            <div class="activity-header">
+              <div class="activity-avatar">RJ</div>
+              <div class="activity-info">
+                <div class="activity-name">Robert Johnson</div>
+                <div class="activity-time">2 hours ago</div>
+              </div>
+              <span class="activity-badge badge-contact">Contact</span>
+            </div>
+            <div class="activity-description">
+              Interview scheduled for tomorrow at 2:00 PM. Senior Backend
+              Developer with 8 years of experience in Node.js and Python.
+            </div>
+            <div class="activity-actions">
+              <a href="#" class="action-btn">
+                <svg fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                  <path
+                    fill-rule="evenodd"
+                    d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                View Profile
+              </a>
+              <a href="#" class="action-btn">
+                <svg fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                Reschedule
+              </a>
+            </div>
+          </div>
+
+          <div class="activity-card" tabindex="0">
+            <div class="activity-header">
+              <div class="activity-avatar">AL</div>
+              <div class="activity-info">
+                <div class="activity-name">Alice Lee</div>
+                <div class="activity-time">3 hours ago</div>
+              </div>
+              <span class="activity-badge badge-job">Job</span>
+            </div>
+            <div class="activity-description">
+              Applied for UX Designer position. Portfolio reviewed and approved.
+              Strong UI/UX skills with Figma and Sketch.
+            </div>
+            <div class="activity-actions">
+              <a href="#" class="action-btn">
+                <svg fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                  <path
+                    fill-rule="evenodd"
+                    d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                Review Application
+              </a>
+              <a href="#" class="action-btn">
+                <svg fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"
+                  />
+                  <path
+                    d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"
+                  />
+                </svg>
+                Contact
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+          <button class="floating-btn secondary" aria-label="Create Job">
+            <svg fill="currentColor" viewBox="0 0 20 20">
+              <path
+                fill-rule="evenodd"
+                d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </button>
+          <button class="floating-btn" aria-label="Add Contact">
+            <svg fill="currentColor" viewBox="0 0 20 20">
+              <path
+                d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z"
+              />
+            </svg>
+          </button>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
