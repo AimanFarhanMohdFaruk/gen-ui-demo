@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Unified CRM - Deal List (List-Focused)</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, sans-serif;
+        background-color: #0a0a0a;
+        color: #fafafa;
+        line-height: 1.5;
+      }
+
+      .layout {
+        display: flex;
+        min-height: 100vh;
+      }
+
+      .sidebar {
+        width: 280px;
+        background-color: #171717;
+        border-right: 1px solid #404040;
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #fafafa;
+        margin-bottom: 2rem;
+      }
+
+      .nav-item {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        margin-bottom: 0.5rem;
+        color: #a3a3a3;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        font-size: 0.875rem;
+        font-weight: 500;
+      }
+
+      .nav-item.active {
+        background-color: #404040;
+        color: #fafafa;
+      }
+
+      .nav-item:hover:not(.active) {
+        background-color: #262626;
+        color: #fafafa;
+      }
+
+      .nav-item svg {
+        width: 1.25rem;
+        height: 1.25rem;
+        margin-right: 0.75rem;
+      }
+
+      .main {
+        flex: 1;
+        padding: 2rem;
+        background-color: #0a0a0a;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+      }
+
+      .page-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #fafafa;
+      }
+
+      .user-menu {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .notifications {
+        position: relative;
+        padding: 0.5rem;
+        background-color: #171717;
+        border: 1px solid #404040;
+      }
+
+      .avatar {
+        width: 2.5rem;
+        height: 2.5rem;
+        background-color: #404040;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        color: #fafafa;
+      }
+
+      .search-section {
+        background-color: #171717;
+        border: 1px solid #404040;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+      }
+
+      .search-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+
+      .search-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #fafafa;
+      }
+
+      .create-deal-btn {
+        padding: 0.75rem 1.5rem;
+        background-color: #404040;
+        border: 1px solid #404040;
+        color: #fafafa;
+        font-size: 0.875rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .create-deal-btn:hover {
+        background-color: #262626;
+      }
+
+      .search-controls {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+      }
+
+      .search-input {
+        flex: 1;
+        padding: 0.75rem 1rem;
+        background-color: #262626;
+        border: 1px solid #404040;
+        color: #fafafa;
+        font-size: 0.875rem;
+      }
+
+      .search-input::placeholder {
+        color: #737373;
+      }
+
+      .filter-tabs {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .filter-tab {
+        padding: 0.5rem 1rem;
+        background-color: #262626;
+        border: 1px solid #404040;
+        color: #a3a3a3;
+        font-size: 0.875rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .filter-tab.active {
+        background-color: #404040;
+        border-color: #404040;
+        color: #fafafa;
+      }
+
+      .filter-tab:hover:not(.active) {
+        background-color: #404040;
+        color: #fafafa;
+      }
+
+      .stats-summary {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        overflow-x: auto;
+        padding-bottom: 0.5rem;
+      }
+
+      .stat-item {
+        background-color: #171717;
+        border: 1px solid #404040;
+        padding: 1rem 1.5rem;
+        min-width: 150px;
+        text-align: center;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+      }
+
+      .stat-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #fafafa;
+        margin-bottom: 0.25rem;
+      }
+
+      .stat-label {
+        font-size: 0.75rem;
+        color: #a3a3a3;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .data-section {
+        background-color: #171717;
+        border: 1px solid #404040;
+        overflow: hidden;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+      }
+
+      .section-header {
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #404040;
+        background-color: #262626;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .section-title {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: #fafafa;
+      }
+
+      .view-toggle {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .toggle-btn {
+        padding: 0.5rem 1rem;
+        background-color: #404040;
+        border: 1px solid #404040;
+        color: #a3a3a3;
+        font-size: 0.875rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .toggle-btn.active {
+        background-color: #404040;
+        border-color: #404040;
+        color: #fafafa;
+      }
+
+      .data-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .data-table th {
+        background-color: #262626;
+        padding: 1rem;
+        text-align: left;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #a3a3a3;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border-bottom: 1px solid #404040;
+      }
+
+      .data-table td {
+        padding: 1rem;
+        border-bottom: 1px solid #262626;
+        font-size: 0.875rem;
+        color: #fafafa;
+        vertical-align: top;
+      }
+
+      .data-table tr:hover {
+        background-color: #262626;
+      }
+
+      .deal-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+      }
+
+      .deal-name {
+        font-weight: 600;
+        color: #fafafa;
+      }
+
+      .deal-company {
+        font-size: 0.75rem;
+        color: #a3a3a3;
+      }
+
+      .deal-contact {
+        font-size: 0.75rem;
+        color: #737373;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+      }
+
+      .status-badge {
+        padding: 0.25rem 0.75rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        display: inline-block;
+      }
+
+      .status-prospecting {
+        background-color: #f59e0b;
+        color: #fafafa;
+      }
+
+      .status-qualified {
+        background-color: #3b82f6;
+        color: #fafafa;
+      }
+
+      .status-proposal {
+        background-color: #8b5cf6;
+        color: #fafafa;
+      }
+
+      .status-negotiation {
+        background-color: #f59e0b;
+        color: #fafafa;
+      }
+
+      .status-closed-won {
+        background-color: #10b981;
+        color: #fafafa;
+      }
+
+      .status-closed-lost {
+        background-color: #ef4444;
+        color: #fafafa;
+      }
+
+      .progress-bar {
+        width: 100%;
+        height: 0.5rem;
+        background-color: #262626;
+        border: 1px solid #404040;
+        overflow: hidden;
+        margin-top: 0.25rem;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #404040, #525252);
+        transition: width 0.3s ease;
+      }
+
+      .action-btn {
+        padding: 0.5rem 1rem;
+        background-color: #262626;
+        border: 1px solid #404040;
+        color: #a3a3a3;
+        font-size: 0.875rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        margin-right: 0.5rem;
+      }
+
+      .action-btn:hover {
+        background-color: #404040;
+        border-color: #404040;
+        color: #fafafa;
+      }
+
+      .action-btn.primary {
+        background-color: #404040;
+        border-color: #404040;
+        color: #fafafa;
+      }
+
+      .action-btn.primary:hover {
+        background-color: #262626;
+      }
+
+      .floating-btn {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        width: 3.5rem;
+        height: 3.5rem;
+        background-color: #404040;
+        border: none;
+        color: #fafafa;
+        font-size: 1.5rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 12px rgba(64, 64, 64, 0.4);
+      }
+
+      .floating-btn:hover {
+        background-color: #262626;
+        transform: scale(1.1);
+      }
+
+      .pipeline-board {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1rem;
+        padding: 1rem;
+        overflow-x: auto;
+      }
+
+      .pipeline-column {
+        background-color: #262626;
+        border: 1px solid #404040;
+        min-height: 400px;
+      }
+
+      .column-header {
+        padding: 1rem;
+        border-bottom: 1px solid #404040;
+        background-color: #171717;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .column-title {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #fafafa;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .column-count {
+        background-color: #404040;
+        color: #fafafa;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+
+      .pipeline-cards {
+        padding: 1rem;
+        min-height: 300px;
+      }
+
+      .pipeline-card {
+        background-color: #171717;
+        border: 1px solid #404040;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        transition: all 0.2s ease;
+      }
+
+      .pipeline-card:hover {
+        background-color: #262626;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      }
+
+      .pipeline-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 0.75rem;
+      }
+
+      .pipeline-card .deal-name {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #fafafa;
+        margin-bottom: 0.25rem;
+      }
+
+      .pipeline-card .deal-value {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #10b981;
+      }
+
+      .pipeline-card-body {
+        margin-bottom: 1rem;
+      }
+
+      .pipeline-card .deal-company {
+        font-size: 0.75rem;
+        color: #a3a3a3;
+        margin-bottom: 0.25rem;
+      }
+
+      .pipeline-card .deal-contact {
+        font-size: 0.75rem;
+        color: #737373;
+        margin-bottom: 0.25rem;
+      }
+
+      .pipeline-card .deal-owner {
+        font-size: 0.75rem;
+        color: #737373;
+        margin-bottom: 0.75rem;
+      }
+
+      .pipeline-card .deal-progress {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .pipeline-card .progress-bar {
+        flex: 1;
+        height: 0.375rem;
+        background-color: #262626;
+        border: 1px solid #404040;
+        overflow: hidden;
+      }
+
+      .pipeline-card .progress-text {
+        font-size: 0.75rem;
+        color: #a3a3a3;
+        font-weight: 500;
+        min-width: 2rem;
+      }
+
+      .pipeline-card-actions {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .action-btn-small {
+        padding: 0.375rem 0.75rem;
+        background-color: #262626;
+        border: 1px solid #404040;
+        color: #a3a3a3;
+        font-size: 0.75rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .action-btn-small:hover {
+        background-color: #404040;
+        border-color: #404040;
+        color: #fafafa;
+      }
+
+      @media (max-width: 768px) {
+        .layout {
+          flex-direction: column;
+        }
+
+        .sidebar {
+          width: 100%;
+          padding: 1rem;
+        }
+
+        .main {
+          padding: 1rem;
+        }
+
+        .search-controls {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .filter-tabs {
+          justify-content: center;
+        }
+
+        .stats-summary {
+          flex-wrap: wrap;
+        }
+
+        .data-table {
+          font-size: 0.75rem;
+        }
+
+        .data-table th,
+        .data-table td {
+          padding: 0.5rem;
+        }
+
+        .floating-btn {
+          bottom: 1rem;
+          right: 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="layout">
+      <nav class="sidebar">
+        <div class="logo">Unified CRM</div>
+        <a href="#" class="nav-item">
+          <svg fill="currentColor" viewBox="0 0 20 20">
+            <path
+              d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"
+            />
+          </svg>
+          Dashboard
+        </a>
+        <a href="#" class="nav-item">
+          <svg fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Contacts
+        </a>
+        <a href="#" class="nav-item">
+          <svg fill="currentColor" viewBox="0 0 20 20">
+            <path
+              fill-rule="evenodd"
+              d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          Companies
+        </a>
+        <a href="#" class="nav-item active">
+          <svg fill="currentColor" viewBox="0 0 20 20">
+            <path
+              d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"
+            />
+            <path
+              fill-rule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          Deals
+        </a>
+        <a href="#" class="nav-item">
+          <svg fill="currentColor" viewBox="0 0 20 20">
+            <path
+              fill-rule="evenodd"
+              d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          Settings
+        </a>
+      </nav>
+
+      <main class="main">
+        <header class="header">
+          <h1 class="page-title">Deals</h1>
+          <div class="user-menu">
+            <button class="notifications" aria-label="Notifications">
+              <svg
+                width="20"
+                height="20"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"
+                />
+              </svg>
+            </button>
+            <div class="avatar">S</div>
+          </div>
+        </header>
+
+        <section class="search-section">
+          <div class="search-header">
+            <h2 class="search-title">Search & Filter Deals</h2>
+            <button class="create-deal-btn">
+              <svg fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fill-rule="evenodd"
+                  d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              Create Deal
+            </button>
+          </div>
+          <div class="search-controls">
+            <input
+              type="text"
+              class="search-input"
+              placeholder="Search deals by name, company, or contact..."
+            />
+            <div class="filter-tabs">
+              <button class="filter-tab active">All Deals</button>
+              <button class="filter-tab">Prospecting</button>
+              <button class="filter-tab">Qualified</button>
+              <button class="filter-tab">Proposal</button>
+              <button class="filter-tab">Negotiation</button>
+              <button class="filter-tab">Closed Won</button>
+            </div>
+          </div>
+        </section>
+
+        <div class="stats-summary">
+          <div class="stat-item">
+            <div class="stat-value">24</div>
+            <div class="stat-label">Total Deals</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">$2.4M</div>
+            <div class="stat-label">Pipeline Value</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">8</div>
+            <div class="stat-label">Won This Month</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">67%</div>
+            <div class="stat-label">Win Rate</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">$850K</div>
+            <div class="stat-label">Avg Deal Size</div>
+          </div>
+        </div>
+
+        <section class="data-section">
+          <div class="section-header">
+            <h2 class="section-title">Deal Listings</h2>
+            <div class="view-toggle">
+              <button class="toggle-btn active" data-view="table">
+                Table View
+              </button>
+              <button class="toggle-btn" data-view="pipeline">
+                Pipeline View
+              </button>
+            </div>
+          </div>
+
+          <div id="table-view">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Deal</th>
+                  <th>Company</th>
+                  <th>Contact</th>
+                  <th>Value</th>
+                  <th>Stage</th>
+                  <th>Progress</th>
+                  <th>Close Date</th>
+                  <th>Owner</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <div class="deal-info">
+                      <div class="deal-name">Enterprise Software License</div>
+                      <div class="deal-contact">
+                        <svg
+                          width="16"
+                          height="16"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"
+                          />
+                        </svg>
+                        John Smith
+                      </div>
+                    </div>
+                  </td>
+                  <td>TechCorp Inc.</td>
+                  <td>John Smith</td>
+                  <td>$250,000</td>
+                  <td>
+                    <span class="status-badge status-qualified">Qualified</span>
+                  </td>
+                  <td>
+                    <div>75%</div>
+                    <div class="progress-bar">
+                      <div class="progress-fill" style="width: 75%"></div>
+                    </div>
+                  </td>
+                  <td>Dec 15, 2024</td>
+                  <td>Sarah Manager</td>
+                  <td>
+                    <button class="action-btn">View</button>
+                    <button class="action-btn">Edit</button>
+                    <button class="action-btn primary">Update</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="deal-info">
+                      <div class="deal-name">Consulting Services</div>
+                      <div class="deal-contact">
+                        <svg
+                          width="16"
+                          height="16"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"
+                          />
+                        </svg>
+                        Maria Johnson
+                      </div>
+                    </div>
+                  </td>
+                  <td>DesignStudio</td>
+                  <td>Maria Johnson</td>
+                  <td>$85,000</td>
+                  <td>
+                    <span class="status-badge status-proposal">Proposal</span>
+                  </td>
+                  <td>
+                    <div>60%</div>
+                    <div class="progress-bar">
+                      <div class="progress-fill" style="width: 60%"></div>
+                    </div>
+                  </td>
+                  <td>Jan 20, 2025</td>
+                  <td>Mike Sales</td>
+                  <td>
+                    <button class="action-btn">View</button>
+                    <button class="action-btn">Edit</button>
+                    <button class="action-btn primary">Update</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="deal-info">
+                      <div class="deal-name">Data Analytics Platform</div>
+                      <div class="deal-contact">
+                        <svg
+                          width="16"
+                          height="16"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"
+                          />
+                        </svg>
+                        David Wilson
+                      </div>
+                    </div>
+                  </td>
+                  <td>DataFlow Systems</td>
+                  <td>David Wilson</td>
+                  <td>$150,000</td>
+                  <td>
+                    <span class="status-badge status-prospecting"
+                      >Prospecting</span
+                    >
+                  </td>
+                  <td>
+                    <div>25%</div>
+                    <div class="progress-bar">
+                      <div class="progress-fill" style="width: 25%"></div>
+                    </div>
+                  </td>
+                  <td>Feb 28, 2025</td>
+                  <td>Sarah Manager</td>
+                  <td>
+                    <button class="action-btn">View</button>
+                    <button class="action-btn">Edit</button>
+                    <button class="action-btn primary">Update</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="deal-info">
+                      <div class="deal-name">Cloud Migration Project</div>
+                      <div class="deal-contact">
+                        <svg
+                          width="16"
+                          height="16"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"
+                          />
+                        </svg>
+                        Lisa Chen
+                      </div>
+                    </div>
+                  </td>
+                  <td>CloudScale</td>
+                  <td>Lisa Chen</td>
+                  <td>$500,000</td>
+                  <td>
+                    <span class="status-badge status-negotiation"
+                      >Negotiation</span
+                    >
+                  </td>
+                  <td>
+                    <div>90%</div>
+                    <div class="progress-bar">
+                      <div class="progress-fill" style="width: 90%"></div>
+                    </div>
+                  </td>
+                  <td>Dec 31, 2024</td>
+                  <td>Mike Sales</td>
+                  <td>
+                    <button class="action-btn">View</button>
+                    <button class="action-btn">Edit</button>
+                    <button class="action-btn primary">Update</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="deal-info">
+                      <div class="deal-name">Mobile App Development</div>
+                      <div class="deal-contact">
+                        <svg
+                          width="16"
+                          height="16"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"
+                          />
+                        </svg>
+                        Alex Rodriguez
+                      </div>
+                    </div>
+                  </td>
+                  <td>StartupXYZ</td>
+                  <td>Alex Rodriguez</td>
+                  <td>$75,000</td>
+                  <td>
+                    <span class="status-badge status-closed-won"
+                      >Closed Won</span
+                    >
+                  </td>
+                  <td>
+                    <div>100%</div>
+                    <div class="progress-bar">
+                      <div class="progress-fill" style="width: 100%"></div>
+                    </div>
+                  </td>
+                  <td>Nov 30, 2024</td>
+                  <td>Sarah Manager</td>
+                  <td>
+                    <button class="action-btn">View</button>
+                    <button class="action-btn">Edit</button>
+                    <button class="action-btn primary">Update</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div id="pipeline-view" style="display: none">
+            <div class="pipeline-board">
+              <div class="pipeline-column">
+                <div class="column-header">
+                  <div class="column-title">Prospecting</div>
+                  <div class="column-count">1</div>
+                </div>
+                <div class="pipeline-cards">
+                  <div class="pipeline-card">
+                    <div class="pipeline-card-header">
+                      <div class="deal-name">Data Analytics Platform</div>
+                      <div class="deal-value">$150,000</div>
+                    </div>
+                    <div class="pipeline-card-body">
+                      <div class="deal-company">DataFlow Systems</div>
+                      <div class="deal-contact">David Wilson</div>
+                      <div class="deal-owner">Sarah Manager</div>
+                      <div class="deal-progress">
+                        <div class="progress-bar">
+                          <div class="progress-fill" style="width: 25%"></div>
+                        </div>
+                        <div class="progress-text">25%</div>
+                      </div>
+                    </div>
+                    <div class="pipeline-card-actions">
+                      <button class="action-btn-small">View</button>
+                      <button class="action-btn-small">Edit</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="pipeline-column">
+                <div class="column-header">
+                  <div class="column-title">Qualified</div>
+                  <div class="column-count">1</div>
+                </div>
+                <div class="pipeline-cards">
+                  <div class="pipeline-card">
+                    <div class="pipeline-card-header">
+                      <div class="deal-name">Enterprise Software License</div>
+                      <div class="deal-value">$250,000</div>
+                    </div>
+                    <div class="pipeline-card-body">
+                      <div class="deal-company">TechCorp Inc.</div>
+                      <div class="deal-contact">John Smith</div>
+                      <div class="deal-owner">Sarah Manager</div>
+                      <div class="deal-progress">
+                        <div class="progress-bar">
+                          <div class="progress-fill" style="width: 75%"></div>
+                        </div>
+                        <div class="progress-text">75%</div>
+                      </div>
+                    </div>
+                    <div class="pipeline-card-actions">
+                      <button class="action-btn-small">View</button>
+                      <button class="action-btn-small">Edit</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="pipeline-column">
+                <div class="column-header">
+                  <div class="column-title">Proposal</div>
+                  <div class="column-count">1</div>
+                </div>
+                <div class="pipeline-cards">
+                  <div class="pipeline-card">
+                    <div class="pipeline-card-header">
+                      <div class="deal-name">Consulting Services</div>
+                      <div class="deal-value">$85,000</div>
+                    </div>
+                    <div class="pipeline-card-body">
+                      <div class="deal-company">DesignStudio</div>
+                      <div class="deal-contact">Maria Johnson</div>
+                      <div class="deal-owner">Mike Sales</div>
+                      <div class="deal-progress">
+                        <div class="progress-bar">
+                          <div class="progress-fill" style="width: 60%"></div>
+                        </div>
+                        <div class="progress-text">60%</div>
+                      </div>
+                    </div>
+                    <div class="pipeline-card-actions">
+                      <button class="action-btn-small">View</button>
+                      <button class="action-btn-small">Edit</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="pipeline-column">
+                <div class="column-header">
+                  <div class="column-title">Negotiation</div>
+                  <div class="column-count">1</div>
+                </div>
+                <div class="pipeline-cards">
+                  <div class="pipeline-card">
+                    <div class="pipeline-card-header">
+                      <div class="deal-name">Cloud Migration Project</div>
+                      <div class="deal-value">$500,000</div>
+                    </div>
+                    <div class="pipeline-card-body">
+                      <div class="deal-company">CloudScale</div>
+                      <div class="deal-contact">Lisa Chen</div>
+                      <div class="deal-owner">Mike Sales</div>
+                      <div class="deal-progress">
+                        <div class="progress-bar">
+                          <div class="progress-fill" style="width: 90%"></div>
+                        </div>
+                        <div class="progress-text">90%</div>
+                      </div>
+                    </div>
+                    <div class="pipeline-card-actions">
+                      <button class="action-btn-small">View</button>
+                      <button class="action-btn-small">Edit</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="pipeline-column">
+                <div class="column-header">
+                  <div class="column-title">Closed Won</div>
+                  <div class="column-count">1</div>
+                </div>
+                <div class="pipeline-cards">
+                  <div class="pipeline-card">
+                    <div class="pipeline-card-header">
+                      <div class="deal-name">Mobile App Development</div>
+                      <div class="deal-value">$75,000</div>
+                    </div>
+                    <div class="pipeline-card-body">
+                      <div class="deal-company">StartupXYZ</div>
+                      <div class="deal-contact">Alex Rodriguez</div>
+                      <div class="deal-owner">Sarah Manager</div>
+                      <div class="deal-progress">
+                        <div class="progress-bar">
+                          <div class="progress-fill" style="width: 100%"></div>
+                        </div>
+                        <div class="progress-text">100%</div>
+                      </div>
+                    </div>
+                    <div class="pipeline-card-actions">
+                      <button class="action-btn-small">View</button>
+                      <button class="action-btn-small">Edit</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <button class="floating-btn" aria-label="Create new deal">
+          <svg fill="currentColor" viewBox="0 0 20 20">
+            <path
+              fill-rule="evenodd"
+              d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </button>
+      </main>
+    </div>
+
+    <script>
+      // View toggle functionality
+      document.addEventListener("DOMContentLoaded", function () {
+        const toggleButtons = document.querySelectorAll(".toggle-btn");
+        const tableView = document.getElementById("table-view");
+        const pipelineView = document.getElementById("pipeline-view");
+
+        toggleButtons.forEach((button) => {
+          button.addEventListener("click", function () {
+            const view = this.getAttribute("data-view");
+
+            // Remove active class from all buttons
+            toggleButtons.forEach((btn) => btn.classList.remove("active"));
+
+            // Add active class to clicked button
+            this.classList.add("active");
+
+            // Show/hide views
+            if (view === "table") {
+              tableView.style.display = "block";
+              pipelineView.style.display = "none";
+            } else if (view === "pipeline") {
+              tableView.style.display = "none";
+              pipelineView.style.display = "block";
+            }
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

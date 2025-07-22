@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Unified CRM - Company List (Modern)</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, sans-serif;
+        background-color: #0a0a0a;
+        color: #fafafa;
+        line-height: 1.5;
+      }
+
+      .layout {
+        display: flex;
+        min-height: 100vh;
+      }
+
+      .sidebar {
+        width: 280px;
+        background-color: #171717;
+        border-right: 1px solid #404040;
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #2563eb;
+        margin-bottom: 2rem;
+      }
+
+      .nav-item {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        margin-bottom: 0.5rem;
+        color: #a3a3a3;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        font-size: 0.875rem;
+        font-weight: 500;
+      }
+
+      .nav-item.active {
+        background-color: #2563eb;
+        color: #fafafa;
+      }
+
+      .nav-item:hover:not(.active) {
+        background-color: #262626;
+        color: #fafafa;
+      }
+
+      .nav-item svg {
+        width: 1.25rem;
+        height: 1.25rem;
+        margin-right: 0.75rem;
+      }
+
+      .main {
+        flex: 1;
+        padding: 2rem;
+        background-color: #0a0a0a;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+      }
+
+      .page-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #fafafa;
+      }
+
+      .user-menu {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .notifications {
+        position: relative;
+        padding: 0.5rem;
+        background-color: #171717;
+        border: 1px solid #404040;
+      }
+
+      .avatar {
+        width: 2.5rem;
+        height: 2.5rem;
+        background-color: #2563eb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        color: #fafafa;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      .stat-card {
+        background-color: #171717;
+        border: 1px solid #404040;
+        padding: 1.5rem;
+        text-align: center;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+      }
+
+      .stat-icon {
+        width: 3rem;
+        height: 3rem;
+        background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+      }
+
+      .stat-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #fafafa;
+        margin-bottom: 0.5rem;
+      }
+
+      .stat-label {
+        font-size: 0.875rem;
+        color: #a3a3a3;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .search-section {
+        background-color: #171717;
+        border: 1px solid #404040;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+      }
+
+      .search-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+
+      .search-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #fafafa;
+      }
+
+      .create-company-btn {
+        padding: 0.75rem 1.5rem;
+        background-color: #2563eb;
+        border: 1px solid #2563eb;
+        color: #fafafa;
+        font-size: 0.875rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .create-company-btn:hover {
+        background-color: #1d4ed8;
+      }
+
+      .search-controls {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+      }
+
+      .search-input {
+        flex: 1;
+        padding: 0.75rem 1rem;
+        background-color: #262626;
+        border: 1px solid #404040;
+        color: #fafafa;
+        font-size: 0.875rem;
+      }
+
+      .search-input::placeholder {
+        color: #737373;
+      }
+
+      .filter-tabs {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .filter-tab {
+        padding: 0.5rem 1rem;
+        background-color: #262626;
+        border: 1px solid #404040;
+        color: #a3a3a3;
+        font-size: 0.875rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .filter-tab.active {
+        background-color: #2563eb;
+        border-color: #2563eb;
+        color: #fafafa;
+      }
+
+      .filter-tab:hover:not(.active) {
+        background-color: #404040;
+        color: #fafafa;
+      }
+
+      .companies-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 1.5rem;
+      }
+
+      .company-card {
+        background-color: #171717;
+        border: 1px solid #404040;
+        padding: 1.5rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+        transition: all 0.2s ease;
+      }
+
+      .company-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+      }
+
+      .company-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .company-logo {
+        width: 3rem;
+        height: 3rem;
+        background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        color: #fafafa;
+        font-size: 1.25rem;
+      }
+
+      .company-info {
+        flex: 1;
+      }
+
+      .company-name {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #fafafa;
+        margin-bottom: 0.25rem;
+      }
+
+      .company-industry {
+        font-size: 0.875rem;
+        color: #a3a3a3;
+        margin-bottom: 0.25rem;
+      }
+
+      .company-location {
+        font-size: 0.875rem;
+        color: #737373;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+      }
+
+      .company-status {
+        padding: 0.5rem 1rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .status-active {
+        background-color: #10b981;
+        color: #fafafa;
+      }
+
+      .status-prospect {
+        background-color: #f59e0b;
+        color: #fafafa;
+      }
+
+      .status-inactive {
+        background-color: #ef4444;
+        color: #fafafa;
+      }
+
+      .company-details {
+        margin-bottom: 1rem;
+      }
+
+      .company-meta {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .meta-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+      }
+
+      .meta-label {
+        font-size: 0.75rem;
+        color: #737373;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .meta-value {
+        font-size: 0.875rem;
+        color: #fafafa;
+        font-weight: 500;
+      }
+
+      .company-description {
+        font-size: 0.875rem;
+        color: #a3a3a3;
+        line-height: 1.6;
+        margin-bottom: 1rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .company-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .company-tag {
+        padding: 0.25rem 0.75rem;
+        background-color: #262626;
+        border: 1px solid #404040;
+        font-size: 0.75rem;
+        color: #a3a3a3;
+        font-weight: 500;
+      }
+
+      .company-actions {
+        display: flex;
+        gap: 0.75rem;
+      }
+
+      .action-btn {
+        padding: 0.5rem 1rem;
+        background-color: #262626;
+        border: 1px solid #404040;
+        color: #a3a3a3;
+        font-size: 0.875rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .action-btn:hover {
+        background-color: #2563eb;
+        border-color: #2563eb;
+        color: #fafafa;
+      }
+
+      .action-btn.primary {
+        background-color: #2563eb;
+        border-color: #2563eb;
+        color: #fafafa;
+      }
+
+      .action-btn.primary:hover {
+        background-color: #1d4ed8;
+      }
+
+      .floating-btn {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        width: 3.5rem;
+        height: 3.5rem;
+        background-color: #2563eb;
+        border: none;
+        color: #fafafa;
+        font-size: 1.5rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+      }
+
+      .floating-btn:hover {
+        background-color: #1d4ed8;
+        transform: scale(1.1);
+      }
+
+      /* View Toggle Styles */
+      .view-toggle-section {
+        margin-bottom: 2rem;
+        display: flex;
+        justify-content: flex-end;
+      }
+
+      .view-toggle {
+        display: flex;
+        gap: 0.5rem;
+        background-color: #171717;
+        border: 1px solid #404040;
+        padding: 0.25rem;
+      }
+
+      .toggle-btn {
+        padding: 0.5rem 1rem;
+        background-color: transparent;
+        border: none;
+        color: #a3a3a3;
+        font-size: 0.875rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .toggle-btn.active {
+        background-color: #2563eb;
+        color: #fafafa;
+      }
+
+      .toggle-btn:hover:not(.active) {
+        background-color: #404040;
+        color: #fafafa;
+      }
+
+      /* Kanban Board Styles */
+      .kanban-board {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .kanban-column {
+        background-color: #171717;
+        border: 1px solid #404040;
+        min-height: 500px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+      }
+
+      .kanban-column-header {
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #404040;
+        background-color: #262626;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .column-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #fafafa;
+      }
+
+      .column-count {
+        background-color: #404040;
+        color: #a3a3a3;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+
+      .kanban-cards {
+        padding: 1rem;
+        min-height: 400px;
+      }
+
+      .kanban-card {
+        background-color: #262626;
+        border: 1px solid #404040;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        transition: all 0.2s ease;
+        cursor: pointer;
+      }
+
+      .kanban-card:hover {
+        background-color: #404040;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      }
+
+      .kanban-card-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 0.75rem;
+      }
+
+      .company-logo-small {
+        width: 2rem;
+        height: 2rem;
+        background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        color: #fafafa;
+        font-size: 0.875rem;
+      }
+
+      .company-info-compact {
+        flex: 1;
+      }
+
+      .company-info-compact .company-name {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #fafafa;
+        margin-bottom: 0.25rem;
+      }
+
+      .company-info-compact .company-industry {
+        font-size: 0.75rem;
+        color: #a3a3a3;
+      }
+
+      .kanban-card-body {
+        margin-bottom: 0.75rem;
+      }
+
+      .kanban-meta {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .kanban-meta .meta-item {
+        font-size: 0.75rem;
+        color: #737373;
+      }
+
+      .kanban-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.25rem;
+      }
+
+      .kanban-tags .tag {
+        padding: 0.25rem 0.5rem;
+        background-color: #404040;
+        border: 1px solid #404040;
+        font-size: 0.75rem;
+        color: #a3a3a3;
+      }
+
+      .kanban-card-actions {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .action-btn-small {
+        padding: 0.25rem 0.75rem;
+        background-color: #404040;
+        border: 1px solid #404040;
+        color: #a3a3a3;
+        font-size: 0.75rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .action-btn-small:hover {
+        background-color: #2563eb;
+        border-color: #2563eb;
+        color: #fafafa;
+      }
+
+      .action-btn-small.primary {
+        background-color: #2563eb;
+        border-color: #2563eb;
+        color: #fafafa;
+      }
+
+      .action-btn-small.primary:hover {
+        background-color: #1d4ed8;
+      }
+
+      @media (max-width: 768px) {
+        .layout {
+          flex-direction: column;
+        }
+
+        .sidebar {
+          width: 100%;
+          padding: 1rem;
+        }
+
+        .main {
+          padding: 1rem;
+        }
+
+        .search-controls {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .filter-tabs {
+          justify-content: center;
+        }
+
+        .companies-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .company-meta {
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+
+        .floating-btn {
+          bottom: 1rem;
+          right: 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="layout">
+      <nav class="sidebar">
+        <div class="logo">Unified CRM</div>
+        <a href="#" class="nav-item">
+          <svg fill="currentColor" viewBox="0 0 20 20">
+            <path
+              d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"
+            />
+          </svg>
+          Dashboard
+        </a>
+        <a href="#" class="nav-item">
+          <svg fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Contacts
+        </a>
+        <a href="#" class="nav-item">
+          <svg fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+            <path
+              fill-rule="evenodd"
+              d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          Jobs
+        </a>
+        <a href="#" class="nav-item active">
+          <svg fill="currentColor" viewBox="0 0 20 20">
+            <path
+              fill-rule="evenodd"
+              d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          Companies
+        </a>
+        <a href="#" class="nav-item">
+          <svg fill="currentColor" viewBox="0 0 20 20">
+            <path
+              fill-rule="evenodd"
+              d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          Settings
+        </a>
+      </nav>
+
+      <main class="main">
+        <header class="header">
+          <h1 class="page-title">Companies</h1>
+          <div class="user-menu">
+            <button class="notifications" aria-label="Notifications">
+              <svg
+                width="20"
+                height="20"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"
+                />
+              </svg>
+            </button>
+            <div class="avatar">S</div>
+          </div>
+        </header>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon">
+              <svg fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fill-rule="evenodd"
+                  d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </div>
+            <div class="stat-value">156</div>
+            <div class="stat-label">Total Companies</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <svg fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </div>
+            <div class="stat-value">89</div>
+            <div class="stat-label">Active Clients</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <svg fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"
+                />
+              </svg>
+            </div>
+            <div class="stat-value">1,247</div>
+            <div class="stat-label">Total Contacts</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <svg fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fill-rule="evenodd"
+                  d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zM6 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </div>
+            <div class="stat-value">23</div>
+            <div class="stat-label">This Month</div>
+          </div>
+        </div>
+
+        <section class="search-section">
+          <div class="search-header">
+            <h2 class="search-title">Search & Filter Companies</h2>
+            <button class="create-company-btn">
+              <svg fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fill-rule="evenodd"
+                  d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              Add Company
+            </button>
+          </div>
+          <div class="search-controls">
+            <input
+              type="text"
+              class="search-input"
+              placeholder="Search companies by name, industry, or location..."
+            />
+            <div class="filter-tabs">
+              <button class="filter-tab active">All Companies</button>
+              <button class="filter-tab">Active Clients</button>
+              <button class="filter-tab">Prospects</button>
+              <button class="filter-tab">Inactive</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- View Toggle -->
+        <div class="view-toggle-section">
+          <div class="view-toggle">
+            <button class="toggle-btn active" data-view="grid">
+              Grid View
+            </button>
+            <button class="toggle-btn" data-view="kanban">Kanban Board</button>
+          </div>
+        </div>
+
+        <!-- Grid View -->
+        <div class="companies-grid" id="grid-view">
+          <div class="company-card">
+            <div class="company-header">
+              <div class="company-logo">TC</div>
+              <div class="company-info">
+                <div class="company-name">TechCorp Inc.</div>
+                <div class="company-industry">Technology</div>
+                <div class="company-location">
+                  <svg
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  San Francisco, CA
+                </div>
+              </div>
+              <span class="company-status status-active">Active</span>
+            </div>
+            <div class="company-details">
+              <div class="company-meta">
+                <div class="meta-item">
+                  <div class="meta-label">Size</div>
+                  <div class="meta-value">500-1000</div>
+                </div>
+                <div class="meta-item">
+                  <div class="meta-label">Revenue</div>
+                  <div class="meta-value">$50M+</div>
+                </div>
+                <div class="meta-item">
+                  <div class="meta-label">Contacts</div>
+                  <div class="meta-value">24</div>
+                </div>
+              </div>
+              <div class="company-description">
+                Leading technology company specializing in enterprise software
+                solutions. Established in 2010 with a focus on innovation and
+                customer success.
+              </div>
+              <div class="company-tags">
+                <span class="company-tag">Enterprise</span>
+                <span class="company-tag">SaaS</span>
+                <span class="company-tag">B2B</span>
+              </div>
+            </div>
+            <div class="company-actions">
+              <button class="action-btn">View Details</button>
+              <button class="action-btn">Edit Company</button>
+              <button class="action-btn primary">View Contacts</button>
+            </div>
+          </div>
+
+          <div class="company-card">
+            <div class="company-header">
+              <div class="company-logo">DS</div>
+              <div class="company-info">
+                <div class="company-name">DesignStudio</div>
+                <div class="company-industry">Design & Creative</div>
+                <div class="company-location">
+                  <svg
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  New York, NY
+                </div>
+              </div>
+              <span class="company-status status-active">Active</span>
+            </div>
+            <div class="company-details">
+              <div class="company-meta">
+                <div class="meta-item">
+                  <div class="meta-label">Size</div>
+                  <div class="meta-value">50-100</div>
+                </div>
+                <div class="meta-item">
+                  <div class="meta-label">Revenue</div>
+                  <div class="meta-value">$10M-25M</div>
+                </div>
+                <div class="meta-item">
+                  <div class="meta-label">Contacts</div>
+                  <div class="meta-value">12</div>
+                </div>
+              </div>
+              <div class="company-description">
+                Creative design agency focused on branding, web design, and
+                digital experiences. Known for innovative design solutions and
+                creative excellence.
+              </div>
+              <div class="company-tags">
+                <span class="company-tag">Creative</span>
+                <span class="company-tag">Branding</span>
+                <span class="company-tag">Web Design</span>
+              </div>
+            </div>
+            <div class="company-actions">
+              <button class="action-btn">View Details</button>
+              <button class="action-btn">Edit Company</button>
+              <button class="action-btn primary">View Contacts</button>
+            </div>
+          </div>
+
+          <div class="company-card">
+            <div class="company-header">
+              <div class="company-logo">DF</div>
+              <div class="company-info">
+                <div class="company-name">DataFlow Systems</div>
+                <div class="company-industry">Data & Analytics</div>
+                <div class="company-location">
+                  <svg
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  Austin, TX
+                </div>
+              </div>
+              <span class="company-status status-prospect">Prospect</span>
+            </div>
+            <div class="company-details">
+              <div class="company-meta">
+                <div class="meta-item">
+                  <div class="meta-label">Size</div>
+                  <div class="meta-value">100-250</div>
+                </div>
+                <div class="meta-item">
+                  <div class="meta-label">Revenue</div>
+                  <div class="meta-value">$25M-50M</div>
+                </div>
+                <div class="meta-item">
+                  <div class="meta-label">Contacts</div>
+                  <div class="meta-value">8</div>
+                </div>
+              </div>
+              <div class="company-description">
+                Data analytics platform company helping businesses make
+                data-driven decisions. Specializing in big data processing and
+                business intelligence.
+              </div>
+              <div class="company-tags">
+                <span class="company-tag">Analytics</span>
+                <span class="company-tag">Big Data</span>
+                <span class="company-tag">BI</span>
+              </div>
+            </div>
+            <div class="company-actions">
+              <button class="action-btn">View Details</button>
+              <button class="action-btn">Edit Company</button>
+              <button class="action-btn primary">View Contacts</button>
+            </div>
+          </div>
+
+          <div class="company-card">
+            <div class="company-header">
+              <div class="company-logo">IT</div>
+              <div class="company-info">
+                <div class="company-name">InnovateTech</div>
+                <div class="company-industry">Technology</div>
+                <div class="company-location">
+                  <svg
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  Seattle, WA
+                </div>
+              </div>
+              <span class="company-status status-inactive">Inactive</span>
+            </div>
+            <div class="company-details">
+              <div class="company-meta">
+                <div class="meta-item">
+                  <div class="meta-label">Size</div>
+                  <div class="meta-value">250-500</div>
+                </div>
+                <div class="meta-item">
+                  <div class="meta-label">Revenue</div>
+                  <div class="meta-value">$100M+</div>
+                </div>
+                <div class="meta-item">
+                  <div class="meta-label">Contacts</div>
+                  <div class="meta-value">18</div>
+                </div>
+              </div>
+              <div class="company-description">
+                Innovative technology company focused on AI and machine learning
+                solutions. Previously active client, currently exploring new
+                opportunities.
+              </div>
+              <div class="company-tags">
+                <span class="company-tag">AI/ML</span>
+                <span class="company-tag">Innovation</span>
+                <span class="company-tag">Research</span>
+              </div>
+            </div>
+            <div class="company-actions">
+              <button class="action-btn">View Details</button>
+              <button class="action-btn">Edit Company</button>
+              <button class="action-btn primary">View Contacts</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Kanban Board View -->
+        <div class="kanban-board" id="kanban-view" style="display: none">
+          <div class="kanban-column">
+            <div class="kanban-column-header">
+              <h3 class="column-title">Active Clients</h3>
+              <span class="column-count">2</span>
+            </div>
+            <div class="kanban-cards">
+              <div class="kanban-card">
+                <div class="kanban-card-header">
+                  <div class="company-logo-small">TC</div>
+                  <div class="company-info-compact">
+                    <div class="company-name">TechCorp Inc.</div>
+                    <div class="company-industry">Technology</div>
+                  </div>
+                </div>
+                <div class="kanban-card-body">
+                  <div class="kanban-meta">
+                    <span class="meta-item">24 contacts</span>
+                    <span class="meta-item">$50M+</span>
+                  </div>
+                  <div class="kanban-tags">
+                    <span class="tag">Enterprise</span>
+                    <span class="tag">SaaS</span>
+                  </div>
+                </div>
+                <div class="kanban-card-actions">
+                  <button class="action-btn-small">View</button>
+                  <button class="action-btn-small primary">Contacts</button>
+                </div>
+              </div>
+
+              <div class="kanban-card">
+                <div class="kanban-card-header">
+                  <div class="company-logo-small">DS</div>
+                  <div class="company-info-compact">
+                    <div class="company-name">DesignStudio</div>
+                    <div class="company-industry">Design & Creative</div>
+                  </div>
+                </div>
+                <div class="kanban-card-body">
+                  <div class="kanban-meta">
+                    <span class="meta-item">12 contacts</span>
+                    <span class="meta-item">$10M-25M</span>
+                  </div>
+                  <div class="kanban-tags">
+                    <span class="tag">Creative</span>
+                    <span class="tag">Branding</span>
+                  </div>
+                </div>
+                <div class="kanban-card-actions">
+                  <button class="action-btn-small">View</button>
+                  <button class="action-btn-small primary">Contacts</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="kanban-column">
+            <div class="kanban-column-header">
+              <h3 class="column-title">Prospects</h3>
+              <span class="column-count">1</span>
+            </div>
+            <div class="kanban-cards">
+              <div class="kanban-card">
+                <div class="kanban-card-header">
+                  <div class="company-logo-small">DF</div>
+                  <div class="company-info-compact">
+                    <div class="company-name">DataFlow Systems</div>
+                    <div class="company-industry">Data & Analytics</div>
+                  </div>
+                </div>
+                <div class="kanban-card-body">
+                  <div class="kanban-meta">
+                    <span class="meta-item">8 contacts</span>
+                    <span class="meta-item">$25M-50M</span>
+                  </div>
+                  <div class="kanban-tags">
+                    <span class="tag">Analytics</span>
+                    <span class="tag">Big Data</span>
+                  </div>
+                </div>
+                <div class="kanban-card-actions">
+                  <button class="action-btn-small">View</button>
+                  <button class="action-btn-small primary">Contacts</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="kanban-column">
+            <div class="kanban-column-header">
+              <h3 class="column-title">Inactive</h3>
+              <span class="column-count">1</span>
+            </div>
+            <div class="kanban-cards">
+              <div class="kanban-card">
+                <div class="kanban-card-header">
+                  <div class="company-logo-small">IT</div>
+                  <div class="company-info-compact">
+                    <div class="company-name">InnovateTech</div>
+                    <div class="company-industry">Technology</div>
+                  </div>
+                </div>
+                <div class="kanban-card-body">
+                  <div class="kanban-meta">
+                    <span class="meta-item">18 contacts</span>
+                    <span class="meta-item">$100M+</span>
+                  </div>
+                  <div class="kanban-tags">
+                    <span class="tag">AI/ML</span>
+                    <span class="tag">Innovation</span>
+                  </div>
+                </div>
+                <div class="kanban-card-actions">
+                  <button class="action-btn-small">View</button>
+                  <button class="action-btn-small primary">Contacts</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="floating-btn" aria-label="Add new company">
+          <svg fill="currentColor" viewBox="0 0 20 20">
+            <path
+              fill-rule="evenodd"
+              d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </button>
+      </main>
+    </div>
+
+    <script>
+      // View toggle functionality
+      document.addEventListener("DOMContentLoaded", function () {
+        const toggleBtns = document.querySelectorAll(".toggle-btn");
+        const gridView = document.getElementById("grid-view");
+        const kanbanView = document.getElementById("kanban-view");
+
+        toggleBtns.forEach((btn) => {
+          btn.addEventListener("click", function () {
+            const view = this.getAttribute("data-view");
+
+            // Update active button
+            toggleBtns.forEach((b) => b.classList.remove("active"));
+            this.classList.add("active");
+
+            // Show/hide views
+            if (view === "grid") {
+              gridView.style.display = "grid";
+              kanbanView.style.display = "none";
+            } else if (view === "kanban") {
+              gridView.style.display = "none";
+              kanbanView.style.display = "grid";
+            }
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

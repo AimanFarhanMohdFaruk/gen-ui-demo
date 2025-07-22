@@ -12,7 +12,7 @@ alwaysApply: false
 
 ## OBJECTIVE
 
-Launch 3 concurrent sub-agents in parallel to develop a single UI concept with different approaches, enabling users to compare options and select the most effective solution.
+Launch 2 concurrent sub-agents in parallel to develop a single UI concept with different approaches, enabling users to compare options and select the most effective solution.
 
 ## DESIGN SYSTEM
 
@@ -45,13 +45,6 @@ Launch 3 concurrent sub-agents in parallel to develop a single UI concept with d
 - Focus on search and filtering capabilities
 - Implement list-based navigation
 
-### Agent 3: Card-Based Approach
-
-- Emphasize visual hierarchy and content cards
-- Use large, prominent cards for each item
-- Focus on visual appeal and user engagement
-- Implement masonry or grid card layouts
-
 ## TECHNICAL REQUIREMENTS
 
 - Construct a standalone HTML page featuring the specified interface screen
@@ -78,5 +71,9 @@ Each agent should provide:
 - **Contact Detail:** Individual contact view with profile toggle
 - **Job List:** Job postings with status, filters, board view
 - **Job Detail:** Individual job with matching candidates
+- **Company List:** Companies list that we actively engage in, filters in industry, kanban board view
+- **Company Detail:** Individual company view, see contacts, deals, company info
+- **Deal List:** Deal postings similar to HubSpot, can view as list or kanban board view
+- **Deal Detail:** Individual Deal detail, can view relevant contacts, communications, notes, project briefs, etc.
 - **Matches:** Job-candidate matching interface with scores
 - **Settings:** User preferences and account management

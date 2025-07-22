@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Unified CRM - Contact List (List-Focused)</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, sans-serif;
+        background-color: #0a0a0a;
+        color: #fafafa;
+        line-height: 1.5;
+      }
+
+      .layout {
+        display: flex;
+        min-height: 100vh;
+      }
+
+      /* Sidebar */
+      .sidebar {
+        width: 280px;
+        background-color: #171717;
+        border-right: 1px solid #404040;
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #2563eb;
+        margin-bottom: 2rem;
+      }
+
+      .nav-item {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        margin-bottom: 0.5rem;
+        color: #a3a3a3;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        font-size: 0.875rem;
+        font-weight: 500;
+      }
+
+      .nav-item.active {
+        background-color: #2563eb;
+        color: #fafafa;
+      }
+
+      .nav-item:hover:not(.active) {
+        background-color: #262626;
+        color: #fafafa;
+      }
+
+      .nav-item svg {
+        width: 1.25rem;
+        height: 1.25rem;
+        margin-right: 0.75rem;
+      }
+
+      /* Main Content */
+      .main {
+        flex: 1;
+        padding: 2rem;
+        background-color: #0a0a0a;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+      }
+
+      .page-title {
+        font-size: 1.875rem;
+        font-weight: 700;
+        color: #fafafa;
+      }
+
+      .user-menu {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .notifications {
+        position: relative;
+        padding: 0.5rem;
+        background-color: #171717;
+        border: 1px solid #404040;
+      }
+
+      .avatar {
+        width: 2.5rem;
+        height: 2.5rem;
+        background-color: #2563eb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        color: #fafafa;
+      }
+
+      /* Search Section */
+      .search-section {
+        background-color: #171717;
+        border: 1px solid #404040;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+      }
+
+      .search-row {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .search-input {
+        flex: 1;
+        background-color: #262626;
+        border: 1px solid #404040;
+        padding: 0.75rem 1rem;
+        color: #fafafa;
+        font-size: 0.875rem;
+      }
+
+      .search-input::placeholder {
+        color: #737373;
+      }
+
+      .filter-tabs {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+
+      .filter-tab {
+        padding: 0.5rem 1rem;
+        background-color: #262626;
+        border: 1px solid #404040;
+        color: #a3a3a3;
+        font-size: 0.875rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .filter-tab.active {
+        background-color: #2563eb;
+        color: #fafafa;
+        border-color: #2563eb;
+      }
+
+      .filter-tab:hover:not(.active) {
+        background-color: #404040;
+        color: #fafafa;
+      }
+
+      /* Stats Summary */
+      .stats-summary {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        overflow-x: auto;
+      }
+
+      .stat-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 1rem;
+        background-color: #171717;
+        border: 1px solid #404040;
+        min-width: 200px;
+        white-space: nowrap;
+      }
+
+      .stat-icon {
+        width: 2rem;
+        height: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .stat-info {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .stat-value {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #fafafa;
+      }
+
+      .stat-label {
+        font-size: 0.75rem;
+        color: #a3a3a3;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      /* Data Table */
+      .data-section {
+        background-color: #171717;
+        border: 1px solid #404040;
+        overflow: hidden;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+      }
+
+      .table-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #404040;
+      }
+
+      .table-title {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: #fafafa;
+      }
+
+      .table-actions {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .toggle-btn {
+        padding: 0.5rem 1rem;
+        background-color: #262626;
+        border: 1px solid #404040;
+        color: #a3a3a3;
+        font-size: 0.875rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .toggle-btn:hover {
+        background-color: #404040;
+        color: #fafafa;
+      }
+
+      .data-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .data-table th {
+        background-color: #262626;
+        padding: 1rem;
+        text-align: left;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #a3a3a3;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border-bottom: 1px solid #404040;
+      }
+
+      .data-table td {
+        padding: 1rem;
+        border-bottom: 1px solid #262626;
+        font-size: 0.875rem;
+        color: #fafafa;
+      }
+
+      .data-table tr:hover {
+        background-color: #262626;
+      }
+
+      .contact-info {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .contact-avatar {
+        width: 2.5rem;
+        height: 2.5rem;
+        background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        color: #fafafa;
+        font-size: 0.875rem;
+      }
+
+      .contact-details {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .contact-name {
+        font-weight: 600;
+        color: #fafafa;
+        margin-bottom: 0.25rem;
+      }
+
+      .contact-title {
+        font-size: 0.75rem;
+        color: #a3a3a3;
+      }
+
+      .contact-location {
+        font-size: 0.75rem;
+        color: #737373;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+      }
+
+      .status-badge {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+        font-weight: 500;
+      }
+
+      .status-available {
+        background-color: #10b981;
+        color: #fafafa;
+      }
+
+      .status-employed {
+        background-color: #f59e0b;
+        color: #fafafa;
+      }
+
+      .status-unavailable {
+        background-color: #ef4444;
+        color: #fafafa;
+      }
+
+      .skills-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.25rem;
+        max-width: 200px;
+      }
+
+      .skill-tag {
+        padding: 0.125rem 0.375rem;
+        background-color: #262626;
+        border: 1px solid #404040;
+        font-size: 0.75rem;
+        color: #a3a3a3;
+      }
+
+      .action-buttons {
+        display: flex;
+        gap: 0.25rem;
+      }
+
+      .action-btn {
+        padding: 0.5rem;
+        background-color: #262626;
+        border: 1px solid #404040;
+        color: #a3a3a3;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .action-btn:hover {
+        background-color: #2563eb;
+        border-color: #2563eb;
+        color: #fafafa;
+      }
+
+      .action-btn svg {
+        width: 1rem;
+        height: 1rem;
+      }
+
+      /* Quick Actions Bar */
+      .quick-actions-bar {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .floating-btn {
+        width: 3.5rem;
+        height: 3.5rem;
+        background-color: #2563eb;
+        border: none;
+        color: #fafafa;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+        transition: all 0.2s ease;
+      }
+
+      .floating-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(37, 99, 235, 0.5);
+      }
+
+      .floating-btn svg {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .layout {
+          flex-direction: column;
+        }
+
+        .sidebar {
+          width: 100%;
+          padding: 1rem;
+        }
+
+        .main {
+          padding: 1rem;
+        }
+
+        .header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 1rem;
+        }
+
+        .search-row {
+          flex-direction: column;
+        }
+
+        .stats-summary {
+          flex-direction: column;
+        }
+
+        .data-table {
+          font-size: 0.75rem;
+        }
+
+        .data-table th,
+        .data-table td {
+          padding: 0.5rem;
+        }
+
+        .contact-info {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0.5rem;
+        }
+
+        .skills-list {
+          max-width: 150px;
+        }
+      }
+
+      /* Focus and Accessibility */
+      .nav-item:focus,
+      .action-btn:focus,
+      .filter-tab:focus {
+        outline: 2px solid #3b82f6;
+        outline-offset: 2px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="layout">
+      <!-- Sidebar Navigation -->
+      <nav class="sidebar">
+        <div class="logo">Unified CRM</div>
+
+        <a href="#" class="nav-item">
+          <svg fill="currentColor" viewBox="0 0 20 20">
+            <path
+              d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"
+            />
+          </svg>
+          Dashboard
+        </a>
+
+        <a href="#" class="nav-item active">
+          <svg fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Contacts
+        </a>
+
+        <a href="#" class="nav-item">
+          <svg fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+            <path
+              fill-rule="evenodd"
+              d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          Jobs
+        </a>
+
+        <a href="#" class="nav-item">
+          <svg fill="currentColor" viewBox="0 0 20 20">
+            <path
+              fill-rule="evenodd"
+              d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          Settings
+        </a>
+      </nav>
+
+      <!-- Main Content -->
+      <main class="main">
+        <!-- Header -->
+        <header class="header">
+          <h1 class="page-title">Contact List</h1>
+          <div class="user-menu">
+            <button class="notifications" aria-label="Notifications">
+              <svg
+                width="20"
+                height="20"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"
+                />
+              </svg>
+            </button>
+            <div class="avatar">S</div>
+          </div>
+        </header>
+
+        <!-- Search Section -->
+        <section class="search-section">
+          <div class="search-row">
+            <input
+              type="text"
+              class="search-input"
+              placeholder="Search contacts by name, skills, or location..."
+              aria-label="Search contacts"
+            />
+            <button class="action-btn">
+              <svg fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fill-rule="evenodd"
+                  d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              Search
+            </button>
+          </div>
+          <div class="filter-tabs">
+            <button class="filter-tab active">All Contacts</button>
+            <button class="filter-tab">Available</button>
+            <button class="filter-tab">Employed</button>
+            <button class="filter-tab">Unavailable</button>
+            <button class="filter-tab">Frontend</button>
+            <button class="filter-tab">Backend</button>
+            <button class="filter-tab">Design</button>
+          </div>
+        </section>
+
+        <!-- Stats Summary -->
+        <div class="stats-summary">
+          <div class="stat-item">
+            <div class="stat-icon" style="background-color: #2563eb">
+              <svg
+                width="16"
+                height="16"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"
+                />
+              </svg>
+            </div>
+            <div class="stat-info">
+              <div class="stat-value">1,247</div>
+              <div class="stat-label">Total Contacts</div>
+            </div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-icon" style="background-color: #10b981">
+              <svg
+                width="16"
+                height="16"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </div>
+            <div class="stat-info">
+              <div class="stat-value">892</div>
+              <div class="stat-label">Available</div>
+            </div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-icon" style="background-color: #f59e0b">
+              <svg
+                width="16"
+                height="16"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </div>
+            <div class="stat-info">
+              <div class="stat-value">312</div>
+              <div class="stat-label">Employed</div>
+            </div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-icon" style="background-color: #ef4444">
+              <svg
+                width="16"
+                height="16"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </div>
+            <div class="stat-info">
+              <div class="stat-value">43</div>
+              <div class="stat-label">Unavailable</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Data Table -->
+        <section class="data-section">
+          <div class="table-header">
+            <h2 class="table-title">All Contacts</h2>
+            <div class="table-actions">
+              <button class="toggle-btn">
+                <svg
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                View Options
+              </button>
+            </div>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Contact</th>
+                <th>Title</th>
+                <th>Location</th>
+                <th>Skills</th>
+                <th>Status</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="contact-info">
+                    <div class="contact-avatar">JD</div>
+                    <div class="contact-details">
+                      <div class="contact-name">John Doe</div>
+                      <div class="contact-location">
+                        <svg
+                          width="12"
+                          height="12"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                            clip-rule="evenodd"
+                          />
+                        </svg>
+                        San Francisco, CA
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td>Senior Frontend Developer</td>
+                <td>San Francisco, CA</td>
+                <td>
+                  <div class="skills-list">
+                    <span class="skill-tag">React</span>
+                    <span class="skill-tag">TypeScript</span>
+                    <span class="skill-tag">Node.js</span>
+                  </div>
+                </td>
+                <td>
+                  <span class="status-badge status-available">Available</span>
+                </td>
+                <td>john.doe@email.com</td>
+                <td>+1 (555) 123-4567</td>
+                <td>
+                  <div class="action-buttons">
+                    <button class="action-btn" aria-label="View">
+                      <svg fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                        <path
+                          fill-rule="evenodd"
+                          d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                    </button>
+                    <button class="action-btn" aria-label="Message">
+                      <svg fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"
+                        />
+                        <path
+                          d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"
+                        />
+                      </svg>
+                    </button>
+                    <button class="action-btn" aria-label="Edit">
+                      <svg fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="contact-info">
+                    <div class="contact-avatar">SM</div>
+                    <div class="contact-details">
+                      <div class="contact-name">Sarah Miller</div>
+                      <div class="contact-location">
+                        <svg
+                          width="12"
+                          height="12"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                            clip-rule="evenodd"
+                          />
+                        </svg>
+                        New York, NY
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td>UX Designer</td>
+                <td>New York, NY</td>
+                <td>
+                  <div class="skills-list">
+                    <span class="skill-tag">Figma</span>
+                    <span class="skill-tag">Sketch</span>
+                    <span class="skill-tag">Adobe XD</span>
+                  </div>
+                </td>
+                <td>
+                  <span class="status-badge status-employed">Employed</span>
+                </td>
+                <td>sarah.miller@email.com</td>
+                <td>+1 (555) 987-6543</td>
+                <td>
+                  <div class="action-buttons">
+                    <button class="action-btn" aria-label="View">
+                      <svg fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                        <path
+                          fill-rule="evenodd"
+                          d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                    </button>
+                    <button class="action-btn" aria-label="Message">
+                      <svg fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"
+                        />
+                        <path
+                          d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"
+                        />
+                      </svg>
+                    </button>
+                    <button class="action-btn" aria-label="Edit">
+                      <svg fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="contact-info">
+                    <div class="contact-avatar">RJ</div>
+                    <div class="contact-details">
+                      <div class="contact-name">Robert Johnson</div>
+                      <div class="contact-location">
+                        <svg
+                          width="12"
+                          height="12"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                            clip-rule="evenodd"
+                          />
+                        </svg>
+                        Austin, TX
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td>Backend Developer</td>
+                <td>Austin, TX</td>
+                <td>
+                  <div class="skills-list">
+                    <span class="skill-tag">Python</span>
+                    <span class="skill-tag">Django</span>
+                    <span class="skill-tag">PostgreSQL</span>
+                  </div>
+                </td>
+                <td>
+                  <span class="status-badge status-available">Available</span>
+                </td>
+                <td>robert.johnson@email.com</td>
+                <td>+1 (555) 456-7890</td>
+                <td>
+                  <div class="action-buttons">
+                    <button class="action-btn" aria-label="View">
+                      <svg fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                        <path
+                          fill-rule="evenodd"
+                          d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                    </button>
+                    <button class="action-btn" aria-label="Message">
+                      <svg fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"
+                        />
+                        <path
+                          d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"
+                        />
+                      </svg>
+                    </button>
+                    <button class="action-btn" aria-label="Edit">
+                      <svg fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="contact-info">
+                    <div class="contact-avatar">AL</div>
+                    <div class="contact-details">
+                      <div class="contact-name">Alice Lee</div>
+                      <div class="contact-location">
+                        <svg
+                          width="12"
+                          height="12"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                            clip-rule="evenodd"
+                          />
+                        </svg>
+                        Seattle, WA
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td>Product Manager</td>
+                <td>Seattle, WA</td>
+                <td>
+                  <div class="skills-list">
+                    <span class="skill-tag">Agile</span>
+                    <span class="skill-tag">Scrum</span>
+                    <span class="skill-tag">JIRA</span>
+                  </div>
+                </td>
+                <td>
+                  <span class="status-badge status-unavailable"
+                    >Unavailable</span
+                  >
+                </td>
+                <td>alice.lee@email.com</td>
+                <td>+1 (555) 321-0987</td>
+                <td>
+                  <div class="action-buttons">
+                    <button class="action-btn" aria-label="View">
+                      <svg fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                        <path
+                          fill-rule="evenodd"
+                          d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                    </button>
+                    <button class="action-btn" aria-label="Message">
+                      <svg fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"
+                        />
+                        <path
+                          d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"
+                        />
+                      </svg>
+                    </button>
+                    <button class="action-btn" aria-label="Edit">
+                      <svg fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- Quick Actions Bar -->
+        <div class="quick-actions-bar">
+          <button class="floating-btn" aria-label="Add New Contact">
+            <svg fill="currentColor" viewBox="0 0 20 20">
+              <path
+                fill-rule="evenodd"
+                d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </button>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Unified CRM - Contact Detail (Modern)</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, sans-serif;
+        background-color: #0a0a0a;
+        color: #fafafa;
+        line-height: 1.5;
+      }
+
+      .layout {
+        display: flex;
+        min-height: 100vh;
+      }
+
+      /* Sidebar */
+      .sidebar {
+        width: 280px;
+        background-color: #171717;
+        border-right: 1px solid #404040;
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #2563eb;
+        margin-bottom: 2rem;
+      }
+
+      .nav-item {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        margin-bottom: 0.5rem;
+        color: #a3a3a3;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        font-size: 0.875rem;
+        font-weight: 500;
+      }
+
+      .nav-item.active {
+        background-color: #2563eb;
+        color: #fafafa;
+      }
+
+      .nav-item:hover:not(.active) {
+        background-color: #262626;
+        color: #fafafa;
+      }
+
+      .nav-item svg {
+        width: 1.25rem;
+        height: 1.25rem;
+        margin-right: 0.75rem;
+      }
+
+      /* Main Content */
+      .main {
+        flex: 1;
+        padding: 2rem;
+        background-color: #0a0a0a;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+      }
+
+      .breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.875rem;
+        color: #a3a3a3;
+      }
+
+      .breadcrumb a {
+        color: #2563eb;
+        text-decoration: none;
+      }
+
+      .breadcrumb a:hover {
+        text-decoration: underline;
+      }
+
+      .user-menu {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .notifications {
+        position: relative;
+        padding: 0.5rem;
+        background-color: #171717;
+        border: 1px solid #404040;
+      }
+
+      .avatar {
+        width: 2.5rem;
+        height: 2.5rem;
+        background-color: #2563eb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        color: #fafafa;
+      }
+
+      /* Contact Header */
+      .contact-header {
+        background-color: #171717;
+        border: 1px solid #404040;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+      }
+
+      .contact-header-content {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+      }
+
+      .contact-avatar-large {
+        width: 5rem;
+        height: 5rem;
+        background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        color: #fafafa;
+        font-size: 2rem;
+      }
+
+      .contact-info-main {
+        flex: 1;
+      }
+
+      .contact-name-large {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #fafafa;
+        margin-bottom: 0.5rem;
+      }
+
+      .contact-title-large {
+        font-size: 1.125rem;
+        color: #a3a3a3;
+        margin-bottom: 0.5rem;
+      }
+
+      .contact-location-large {
+        font-size: 0.875rem;
+        color: #737373;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .contact-status-large {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+        font-weight: 600;
+        display: inline-block;
+      }
+
+      .status-available {
+        background-color: #10b981;
+        color: #fafafa;
+      }
+
+      .contact-actions-header {
+        display: flex;
+        gap: 1rem;
+      }
+
+      .action-btn {
+        padding: 0.75rem 1.5rem;
+        background-color: #262626;
+        border: 1px solid #404040;
+        color: #a3a3a3;
+        font-size: 0.875rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .action-btn:hover {
+        background-color: #2563eb;
+        border-color: #2563eb;
+        color: #fafafa;
+      }
+
+      .action-btn.primary {
+        background-color: #2563eb;
+        border-color: #2563eb;
+        color: #fafafa;
+      }
+
+      .action-btn.primary:hover {
+        background-color: #1d4ed8;
+      }
+
+      /* Stats Grid */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      .stat-card {
+        background-color: #171717;
+        border: 1px solid #404040;
+        padding: 1.5rem;
+        text-align: center;
+      }
+
+      .stat-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #fafafa;
+        margin-bottom: 0.5rem;
+      }
+
+      .stat-label {
+        font-size: 0.875rem;
+        color: #a3a3a3;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      /* Content Grid */
+      .content-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 2rem;
+      }
+
+      .main-content {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+      }
+
+      .detail-card {
+        background-color: #171717;
+        border: 1px solid #404040;
+        padding: 1.5rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+      }
+
+      .card-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #fafafa;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .card-title svg {
+        width: 1.25rem;
+        height: 1.25rem;
+        color: #2563eb;
+      }
+
+      .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+      }
+
+      .info-item {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+      }
+
+      .info-label {
+        font-size: 0.75rem;
+        color: #737373;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .info-value {
+        font-size: 0.875rem;
+        color: #fafafa;
+        font-weight: 500;
+      }
+
+      .skills-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .skill-tag {
+        padding: 0.5rem 1rem;
+        background-color: #262626;
+        border: 1px solid #404040;
+        font-size: 0.875rem;
+        color: #a3a3a3;
+        font-weight: 500;
+      }
+
+      .experience-item {
+        padding: 1rem 0;
+        border-bottom: 1px solid #262626;
+      }
+
+      .experience-item:last-child {
+        border-bottom: none;
+      }
+
+      .experience-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #fafafa;
+        margin-bottom: 0.25rem;
+      }
+
+      .experience-company {
+        font-size: 0.875rem;
+        color: #a3a3a3;
+        margin-bottom: 0.25rem;
+      }
+
+      .experience-duration {
+        font-size: 0.75rem;
+        color: #737373;
+      }
+
+      /* Sidebar Content */
+      .sidebar-content {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+      }
+
+      .activity-feed {
+        background-color: #171717;
+        border: 1px solid #404040;
+        padding: 1.5rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+      }
+
+      .activity-list {
+        list-style: none;
+      }
+
+      .activity-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1rem 0;
+        border-bottom: 1px solid #262626;
+      }
+
+      .activity-item:last-child {
+        border-bottom: none;
+      }
+
+      .activity-avatar {
+        width: 2rem;
+        height: 2rem;
+        background-color: #404040;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        color: #fafafa;
+        font-size: 0.75rem;
+      }
+
+      .activity-content {
+        flex: 1;
+      }
+
+      .activity-text {
+        color: #fafafa;
+        font-size: 0.875rem;
+        margin-bottom: 0.25rem;
+      }
+
+      .activity-time {
+        color: #737373;
+        font-size: 0.75rem;
+      }
+
+      .quick-actions {
+        background-color: #171717;
+        border: 1px solid #404040;
+        padding: 1.5rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+      }
+
+      .quick-actions-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+
+      .quick-action-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem;
+        background-color: #262626;
+        border: 1px solid #404040;
+        color: #a3a3a3;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        font-size: 0.875rem;
+        font-weight: 500;
+      }
+
+      .quick-action-btn:hover {
+        background-color: #2563eb;
+        border-color: #2563eb;
+        color: #fafafa;
+      }
+
+      .quick-action-btn svg {
+        width: 1.25rem;
+        height: 1.25rem;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .layout {
+          flex-direction: column;
+        }
+
+        .sidebar {
+          width: 100%;
+          padding: 1rem;
+        }
+
+        .main {
+          padding: 1rem;
+        }
+
+        .contact-header-content {
+          flex-direction: column;
+          text-align: center;
+        }
+
+        .contact-actions-header {
+          justify-content: center;
+          margin-top: 1rem;
+        }
+
+        .content-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .info-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .stats-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      /* Focus and Accessibility */
+      .nav-item:focus,
+      .action-btn:focus,
+      .quick-action-btn:focus {
+        outline: 2px solid #3b82f6;
+        outline-offset: 2px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="layout">
+      <!-- Sidebar Navigation -->
+      <nav class="sidebar">
+        <div class="logo">Unified CRM</div>
+
+        <a href="#" class="nav-item">
+          <svg fill="currentColor" viewBox="0 0 20 20">
+            <path
+              d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"
+            />
+          </svg>
+          Dashboard
+        </a>
+
+        <a href="#" class="nav-item active">
+          <svg fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Contacts
+        </a>
+
+        <a href="#" class="nav-item">
+          <svg fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+            <path
+              fill-rule="evenodd"
+              d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          Jobs
+        </a>
+
+        <a href="#" class="nav-item">
+          <svg fill="currentColor" viewBox="0 0 20 20">
+            <path
+              fill-rule="evenodd"
+              d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          Settings
+        </a>
+      </nav>
+
+      <!-- Main Content -->
+      <main class="main">
+        <!-- Header -->
+        <header class="header">
+          <div class="breadcrumb">
+            <a href="#">Contacts</a>
+            <span>/</span>
+            <span>John Doe</span>
+          </div>
+          <div class="user-menu">
+            <button class="notifications" aria-label="Notifications">
+              <svg
+                width="20"
+                height="20"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"
+                />
+              </svg>
+            </button>
+            <div class="avatar">S</div>
+          </div>
+        </header>
+
+        <!-- Contact Header -->
+        <section class="contact-header">
+          <div class="contact-header-content">
+            <div class="contact-avatar-large">JD</div>
+            <div class="contact-info-main">
+              <h1 class="contact-name-large">John Doe</h1>
+              <div class="contact-title-large">Senior Frontend Developer</div>
+              <div class="contact-location-large">
+                <svg
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                San Francisco, CA
+              </div>
+              <span class="contact-status-large status-available"
+                >Available</span
+              >
+            </div>
+            <div class="contact-actions-header">
+              <button class="action-btn">
+                <svg fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"
+                  />
+                  <path
+                    d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"
+                  />
+                </svg>
+                Send Message
+              </button>
+              <button class="action-btn primary">
+                <svg fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                Schedule Call
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value">8</div>
+            <div class="stat-label">Years Experience</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">15</div>
+            <div class="stat-label">Projects Completed</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">$120k</div>
+            <div class="stat-label">Salary Expectation</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">95%</div>
+            <div class="stat-label">Response Rate</div>
+          </div>
+        </div>
+
+        <!-- Content Grid -->
+        <div class="content-grid">
+          <div class="main-content">
+            <!-- Contact Information -->
+            <div class="detail-card">
+              <h2 class="card-title">
+                <svg fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"
+                  />
+                </svg>
+                Contact Information
+              </h2>
+              <div class="info-grid">
+                <div class="info-item">
+                  <div class="info-label">Email</div>
+                  <div class="info-value">john.doe@email.com</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Phone</div>
+                  <div class="info-value">+1 (555) 123-4567</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Location</div>
+                  <div class="info-value">San Francisco, CA</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">LinkedIn</div>
+                  <div class="info-value">linkedin.com/in/johndoe</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">GitHub</div>
+                  <div class="info-value">github.com/johndoe</div>
+                </div>
+                <div class="info-item">
+                  <div class="info-label">Portfolio</div>
+                  <div class="info-value">johndoe.dev</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Skills -->
+            <div class="detail-card">
+              <h2 class="card-title">
+                <svg fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                Skills & Expertise
+              </h2>
+              <div class="skills-list">
+                <span class="skill-tag">React</span>
+                <span class="skill-tag">TypeScript</span>
+                <span class="skill-tag">Node.js</span>
+                <span class="skill-tag">Next.js</span>
+                <span class="skill-tag">Tailwind CSS</span>
+                <span class="skill-tag">GraphQL</span>
+                <span class="skill-tag">PostgreSQL</span>
+                <span class="skill-tag">Docker</span>
+                <span class="skill-tag">AWS</span>
+                <span class="skill-tag">Jest</span>
+              </div>
+            </div>
+
+            <!-- Experience -->
+            <div class="detail-card">
+              <h2 class="card-title">
+                <svg fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                Work Experience
+              </h2>
+              <div class="experience-item">
+                <div class="experience-title">Senior Frontend Developer</div>
+                <div class="experience-company">TechCorp Inc.</div>
+                <div class="experience-duration">2021 - Present</div>
+              </div>
+              <div class="experience-item">
+                <div class="experience-title">Frontend Developer</div>
+                <div class="experience-company">StartupXYZ</div>
+                <div class="experience-duration">2019 - 2021</div>
+              </div>
+              <div class="experience-item">
+                <div class="experience-title">Junior Developer</div>
+                <div class="experience-company">WebSolutions</div>
+                <div class="experience-duration">2017 - 2019</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sidebar Content -->
+          <div class="sidebar-content">
+            <!-- Activity Feed -->
+            <div class="activity-feed">
+              <h3 class="card-title">Recent Activity</h3>
+              <ul class="activity-list">
+                <li class="activity-item">
+                  <div class="activity-avatar">S</div>
+                  <div class="activity-content">
+                    <div class="activity-text">Message sent to John Doe</div>
+                    <div class="activity-time">2 hours ago</div>
+                  </div>
+                </li>
+                <li class="activity-item">
+                  <div class="activity-avatar">S</div>
+                  <div class="activity-content">
+                    <div class="activity-text">Profile updated</div>
+                    <div class="activity-time">1 day ago</div>
+                  </div>
+                </li>
+                <li class="activity-item">
+                  <div class="activity-avatar">S</div>
+                  <div class="activity-content">
+                    <div class="activity-text">Contact added to favorites</div>
+                    <div class="activity-time">3 days ago</div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+              <h3 class="card-title">Quick Actions</h3>
+              <div class="quick-actions-list">
+                <a href="#" class="quick-action-btn">
+                  <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"
+                    />
+                  </svg>
+                  Edit Contact
+                </a>
+                <a href="#" class="quick-action-btn">
+                  <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fill-rule="evenodd"
+                      d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  View Resume
+                </a>
+                <a href="#" class="quick-action-btn">
+                  <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Schedule Interview
+                </a>
+                <a href="#" class="quick-action-btn">
+                  <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fill-rule="evenodd"
+                      d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  Export Contact
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
